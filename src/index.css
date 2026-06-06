@@ -1,4 +1,28 @@
 @import "tailwindcss";
-body{
-    margin: 0;
+
+:root {
+  --background: #ffffff;
+  --foreground: #212529;
+  --muted-foreground: #64748b;
+  --border: #e2e8f0;
+  --input-background: #f8fafc;
+  --ring: #94a3b8;
+  --muted: #f1f5f9;
+}
+
+[data-theme="dark"] {
+  --background: #212529;
+  --foreground: #f8fafc;
+  --muted-foreground: #94a3b8;
+  --border: #1e293b;
+  --input-background: #1e293b;
+  --ring: #475569;
+  --muted: #1e293b;
+}
+
+body {
+  margin: 0;
+  background-color: var(--background);
+  color: var(--foreground);
+  transition: background-color 0.3s, color 0.3s;
 }

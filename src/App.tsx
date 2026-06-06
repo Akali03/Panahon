@@ -1,64 +1,57 @@
-import { useEffect, useState } from 'react'
+import { Cloud, Droplets, MapPin, Search, Thermometer, Wind } from 'lucide-react'
+import { ThemeProvider } from './Context/ThemeProvider';
+import { ThemeToggle } from './components/ThemeToggle';
 import './App.css'
 
-interface WeatherData {
-  city: string,
-  temp: number,
-  description: string,
-  humidity: number,
-  windSpeed: number,
-  icon: string
-}
 
 function App() {
-  const [data, setData] = useState<WeatherData | null>(null)
-
-useEffect(() => {
-    const fetchWeather = async () => {
-      try {
-        const res = await fetch('/api/weather') 
-        const weatherData: WeatherData = await res.json()
-        console.log(weatherData)
-        setData(weatherData)
-      } catch (error) {
-        console.error('Failed to fetch weather:', error)
-      }
-    }
-
-    fetchWeather();
-  }, [])
-
-  const iconUrl = data?.icon
-    ? `https://openweathermap.org/img/wn/${data.icon}@2x.png`
-    : null
 
   return (
-    <div className="max-w-md mx-auto mt-6 shadow-md p-5 text-center">
-      <h2 className="text-xl font-bold mb-4">
-        Weather in {data?.city}
-      </h2>
+    <ThemeProvider>
+     <div className="max-w-xl mx-auto mt-10 p-4 space-y-3">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2 text-foreground">
+              <MapPin className="w-4 h-4 text-muted-foreground" />
+              <span className="text-sm font-medium">Manila, PH</span>
+            </div>
+            <ThemeToggle />
+          </div>
 
-      {iconUrl && (
-        <img src={iconUrl} alt={data?.description} />
-      )}
-
-      {data && (
-        <div className="mt-2">
-          <p className="text-lg font-semibold">
-            {data.temp}°C
-          </p>
-          <p className="text-gray-600 capitalize">
-            {data.description}
-          </p>
-          <p className="text-sm text-gray-500">
-            Humidity: {data.humidity}%
-          </p>
-          <p className="text-sm text-gray-500">
-            Wind: {data.windSpeed} m/s
-          </p>
-        </div>
-      )}
+          {/* Search Bar */}
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground transition-colors duration-300" />
+            <input
+              type="text"
+              placeholder="Search location..."
+              className="w-full bg-input-background border border-border rounded-lg pl-10 pr-4 py-2.5 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring transition-all duration-300"
+            />
+          </div>
+          {/* Weather Info */}
+          <div className="flex items-end gap-6 mt-1">
+            <div className="flex items-end gap-1">
+              <Thermometer className="w-5 h-5 text-muted-foreground mb-1" />
+              <span className="text-5xl font-bold text-foreground">32</span>
+              <span className="text-xl text-muted-foreground mb-2">°C</span>
+            </div>
+            <div className="flex flex-col gap-1 mb-1 text-sm text-muted-foreground">
+              <div className="flex items-center gap-1">
+                <Cloud className="w-4 h-4" />
+                <span>Partly Cloudy</span>
+              </div>
+              <div className="flex items-center gap-4">
+                <div className="flex items-center gap-1">
+                  <Droplets className="w-4 h-4" />
+                  <span>78%</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <Wind className="w-4 h-4" />
+                  <span>14 km/h</span>
+                </div>
+              </div>
+            </div>
+          </div>
     </div>
+    </ThemeProvider>
   )
 }
 

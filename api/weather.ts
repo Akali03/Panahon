@@ -1,8 +1,4 @@
-interface Query {
-  city?: string,
-  lat?: string,
-  lon?: string
-}
+
 export default async function handler(req, res) {
   try {
     const {city, lat, lon} = req.query; 
