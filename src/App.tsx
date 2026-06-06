@@ -12,7 +12,7 @@ function App() {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2 text-foreground">
               <MapPin className="w-4 h-4 text-muted-foreground" />
-              <span className="text-sm font-medium">Manila, PH</span>
+              <span className="text-sm font-medium">Manila,PH</span>
             </div>
             <ThemeToggle />
           </div>
