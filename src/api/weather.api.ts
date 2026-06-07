@@ -11,17 +11,15 @@ interface WeatherData {
 //     ? `https://openweathermap.org/img/wn/${data.icon}@2x.png`
 //     : null
 
-export const fetchWeatherDate = async () =>{
-      try {
-        const res = await fetch('/api/weather') 
-        const weatherData: WeatherData = await res.json()
-        console.log(weatherData)
+export const fetchWeatherData = async (): Promise<WeatherData> =>{
+  
+        const res = await fetch('/api/weather')
+        if(!res.ok){
+          throw new Error('Failed to fetch weather data')
+        }
+        return await res.json()
 
-      } catch (error) {
-        console.error('Failed to fetch weather:', error)
-      }
-
-    }
+    };
 
 
 
