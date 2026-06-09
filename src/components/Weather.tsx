@@ -82,7 +82,7 @@ function Weather() {
                     <input
                         type="text"
                         placeholder="Search location..."
-                        className="w-full bg-input-background border border-border rounded-lg pl-10 pr-4 py-2.5 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring transition-all duration-300"
+                        className="w-full bg-input-background border border-border rounded-lg truncate pl-10 pr-4 py-2.5 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring transition-all duration-300"
                     />
                 )}
             </div>
