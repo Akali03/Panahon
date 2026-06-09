@@ -1,11 +1,17 @@
 import {
   Cloud,
   Droplet,
-  Wind,
+  Wind, type LucideIcon
 } from "lucide-react";
 
+interface SkeletonCardProps {
+  title: string;
+  value: string;
+  icon?: LucideIcon;
+}
+
 function WeatherSkeleton() {
-  const skeletonCards = [
+  const skeletonCards : SkeletonCardProps[] = [
      { title: "Condition", value: "Loading...", icon: Cloud },
      { title: "Humidity", value: "Loading...", icon: Droplet },
      { title: "Wind Speed", value: "Loading...", icon: Wind },
