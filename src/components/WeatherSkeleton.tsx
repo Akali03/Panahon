@@ -21,6 +21,7 @@ function WeatherSkeleton() {
      <>
        {/* Temperature Section */}
        <div className="flex items-end gap-6 mt-1 animate-pulse">
+        <div className="w-10 h-10 rounded-3xl bg-gray-200 dark:bg-gray-700"></div>
          <div className="flex items-end gap-2">
            <div className="w-5 h-5 rounded bg-gray-200 dark:bg-gray-700" />
            <div className="h-16 w-28 rounded bg-gray-200 dark:bg-gray-700" />
@@ -29,7 +30,7 @@ function WeatherSkeleton() {
 
   
        {/* Weather Cards Skeleton */}
-       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 ">
+       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-10">
          {skeletonCards.map((card, index) => (
            <div
             key={index}

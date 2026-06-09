@@ -2,9 +2,10 @@ import {
     MapPin,
     Search,
     Thermometer,
-    Cloud,
     Droplet,
     Wind,
+    Eye,
+    Gauge
 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { fetchWeatherData } from "../api/weather.api";
@@ -14,11 +15,15 @@ import WeatherSkeleton from "./WeatherSkeleton";
 
 interface WeatherType {
     city: string;
+    country: string;
     temp: number;
+    feels_like: number;
     description: string;
     humidity: number;
     windSpeed: number;
-    icon: string;
+    pressure: number;
+    visibility: number;
+    icon?: string;
 }
 
 
@@ -53,7 +58,7 @@ function Weather() {
                     {loading ? (
                         <div className="h-4 w-28 rounded bg-gray-200 dark:bg-gray-700 animate-pulse" />
                     ) : (
-                        <span className="text-sm font-medium">{weather?.city}</span>
+                        <span className="text-sm font-medium">{weather?.city}, {weather?.country}</span>
                     )}
                 </div>
                 {loading ? (
@@ -94,28 +99,38 @@ function Weather() {
                 weather && (
                     <>
                         {/* Temperature */}
-                        <div className="flex items-end gap-6 mt-1">
-                            <div className="flex items-end gap-1">
-                                <Thermometer className="w-5 h-5 text-muted-foreground mb-1" />
+                        <div className="flex items-end gap-6 mt-3">
+                            {weather?.icon && (
+                                <img
+                                    src={`https://openweathermap.org/img/wn/${weather.icon}@2x.png`}
+                                    alt={weather.description}
+                                    className="w-20 h-20"
+                                />
+                            )}
+                            <div className="flex flex-col">
+                                {/* temperature row */}
+                                <div className="flex items-end">
+                                    <Thermometer className="w-5 h-5 text-muted-foreground mb-1" />
+                                    <span className="text-5xl font-bold text-foreground">
+                                        {Math.round(weather.temp)}
+                                    </span>
 
-                                <span className="text-5xl font-bold text-foreground">
-                                    {Math.round(weather.temp)}
+                                    <span className="text-xl  ml-1 mb-2">
+                                        °C
+                                    </span>
+                                </div>
+                                <span className="text-xs dark:text-gray-500 opacity-55 capitalize text-center">
+                                    {weather.description}
                                 </span>
-
-                                <span className="text-xl text-muted-foreground mb-2">
-                                    °C
-                                </span>
+                            
                             </div>
+                              <span className="text-xs dark:text-gray-500 opacity-55 capitalize text-center">
+                                    Feels like: {weather.feels_like}°C
+                                </span>
                         </div>
 
                         {/* Weather Cards */}
-                        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-                            <WeatherCard
-                                title="Condition"
-                                value={weather.description}
-                                icon={Cloud}
-                            />
-
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-10">
                             <WeatherCard
                                 title="Humidity"
                                 value={`${weather.humidity}%`}
@@ -129,8 +144,15 @@ function Weather() {
                             />
 
                             <WeatherCard
-                                title="Icon"
-                                value={weather.icon}
+                                title="Visibility"
+                                value={`${weather.visibility} m/s`}
+                                icon={Eye}
+                            />
+
+                            <WeatherCard
+                                title="Pressure"
+                                value={`${weather.pressure} m/s`}
+                                icon={Gauge}
                             />
                         </div>
                     </>

@@ -1,10 +1,14 @@
 interface WeatherData {
   city: string,
+  country: string,
   temp: number,
+  feels_like: number,
   description: string,
   humidity: number,
   windSpeed: number,
-  icon: string
+  pressure: number,
+  visibility: number,
+  icon?: string
 }
 
 //   const iconUrl = data?.icon
