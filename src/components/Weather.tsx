@@ -29,6 +29,7 @@ interface WeatherType {
 
 function Weather() {
     const [weather, setWeather] = useState<WeatherType | null>(null);
+    const [searchCity, setSearchCity] = useState("");
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
@@ -47,6 +48,25 @@ function Weather() {
 
         getWeatherData();
     }, []);
+    const handleSearch = async (e: React.SyntheticEvent<HTMLFormElement>)=>{
+        e.preventDefault();
+        
+        if(!searchCity.trim()) return;
+          setLoading(true);
+          setError(null);
+
+            try {
+        const data = await fetchWeatherData(searchCity); 
+        setWeather(data);
+    } catch (err) {
+        console.error(err);
+        setError("Failed to fetch weather data");
+        setWeather(null);
+    } finally {
+        setLoading(false);
+    }
+
+    }
 
     return (
         <div className="max-w-xl mx-auto mt-10 p-4 space-y-3">
@@ -79,16 +99,19 @@ function Weather() {
 
             {/* Search Bar */}
             <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-
                 {loading ? (
                     <div className="h-10 w-full rounded-lg bg-gray-200 dark:bg-gray-700 animate-pulse pl-10" />
                 ) : (
+                 <form onSubmit={handleSearch}>
+                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                     <input
                         type="text"
+                        value={searchCity}
+                        onChange={(e) => setSearchCity(e.target.value)}
                         placeholder="Search location..."
                         className="w-full bg-input-background border border-border rounded-lg truncate pl-10 pr-4 py-2.5 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring transition-all duration-300"
                     />
+                 </form>
                 )}
             </div>
 
