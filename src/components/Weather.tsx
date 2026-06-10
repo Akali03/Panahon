@@ -48,26 +48,71 @@ function Weather() {
 
         getWeatherData();
     }, []);
-    const handleSearch = async (e: React.SyntheticEvent<HTMLFormElement>)=>{
+    const handleSearch = async (e: React.SyntheticEvent<HTMLFormElement>) => {
         e.preventDefault();
-        
-        if(!searchCity.trim()) return;
-          setLoading(true);
-          setError(null);
 
-            try {
-        const data = await fetchWeatherData(searchCity); 
-        setWeather(data);
-    } catch (err) {
-        console.error(err);
-        setError("Failed to fetch weather data");
-        setWeather(null);
-    } finally {
-        setLoading(false);
+        if (!searchCity.trim()) return;
+        setLoading(true);
+        setError(null);
+
+        try {
+            const data = await fetchWeatherData(searchCity);
+            setWeather(data);
+        } catch (err) {
+            console.error(err);
+            setError("Failed to fetch weather data");
+            setWeather(null);
+        } finally {
+            setLoading(false);
+        }
+
     }
+    useEffect(() => {
+        if (!navigator.geolocation) return;
 
-    }
+        navigator.geolocation.getCurrentPosition(
+            async (position) => {
+                const { latitude, longitude } = position.coords;
+                const data = await fetchWeatherData(undefined, latitude, longitude);
+                setWeather(data);
+            },
+            () => {
+                // user denied or not yet granted -> do nothing
+                setError("Location access denied. Please allow location permissions in your browser to see your current location.")
+            }
+        );
+    }, []);
+    const handleCurrentLocation = () => {
+        if (!navigator.geolocation) {
+            setError("Geolocation is not supported by your browser");
+            return;
+        }
 
+        setLoading(true);
+        setError(null);
+
+        navigator.geolocation.getCurrentPosition(
+            async (position) => {
+                const { latitude, longitude } = position.coords;
+
+                try {
+                    const data = await fetchWeatherData(undefined, latitude, longitude);
+                    setWeather(data);
+                } catch (err) {
+                    console.error(err);
+                    setError("Failed to fetch weather data");
+                    setWeather(null);
+                } finally {
+                    setLoading(false);
+                }
+            },
+            (err) => {
+                console.error(err);
+                setError("Location permission denied or unavailable");
+                setLoading(false);
+            }
+        );
+    };
     return (
         <div className="max-w-xl mx-auto mt-10 p-4 space-y-3">
             {/* Header */}
@@ -102,16 +147,24 @@ function Weather() {
                 {loading ? (
                     <div className="h-10 w-full rounded-lg bg-gray-200 dark:bg-gray-700 animate-pulse pl-10" />
                 ) : (
-                 <form onSubmit={handleSearch}>
-                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                    <input
-                        type="text"
-                        value={searchCity}
-                        onChange={(e) => setSearchCity(e.target.value)}
-                        placeholder="Search location..."
-                        className="w-full bg-input-background border border-border rounded-lg truncate pl-10 pr-4 py-2.5 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring transition-all duration-300"
-                    />
-                 </form>
+                    <form onSubmit={handleSearch}>
+                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                        <input
+                            type="text"
+                            value={searchCity}
+                            onChange={(e) => setSearchCity(e.target.value)}
+                            placeholder="Search location..."
+                            className="w-full bg-input-background border border-border rounded-lg truncate pl-10 pr-4 py-2.5 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring transition-all duration-300"
+                        />
+                        <button
+                            type="button"
+                            onClick={handleCurrentLocation}
+                            className="absolute right-2 top-1/2 -translate-y-1/2 p-2 rounded-full cursor-pointer bg-blue-500 text-white hover:bg-blue-600 transition"
+                            title="Use current location"
+                        >
+                            <MapPin className="w-4 h-4" />
+                        </button>
+                    </form>
                 )}
             </div>
 
@@ -145,11 +198,11 @@ function Weather() {
                                 <span className="text-xs dark:text-gray-500 opacity-55 capitalize text-center">
                                     {weather.description}
                                 </span>
-                            
+
                             </div>
-                              <span className="text-xs dark:text-gray-500 opacity-55 capitalize text-center">
-                                    Feels like: {weather.feels_like}°C
-                                </span>
+                            <span className="text-xs dark:text-gray-500 opacity-55 capitalize text-center">
+                                Feels like: {weather.feels_like}°C
+                            </span>
                         </div>
 
                         {/* Weather Cards */}
