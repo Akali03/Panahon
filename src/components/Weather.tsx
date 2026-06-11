@@ -38,8 +38,7 @@ function Weather() {
             try {
                 const data = await fetchWeatherData();
                 setWeather(data);
-            } catch (err) {
-                console.error(err);
+            } catch {
                 setError("Failed to fetch weather data");
             } finally {
                 setLoading(false);
@@ -58,8 +57,7 @@ function Weather() {
         try {
             const data = await fetchWeatherData(searchCity);
             setWeather(data);
-        } catch (err) {
-            console.error(err);
+        } catch {
             setError("Failed to fetch weather data");
             setWeather(null);
         } finally {
@@ -98,16 +96,14 @@ function Weather() {
                 try {
                     const data = await fetchWeatherData(undefined, latitude, longitude);
                     setWeather(data);
-                } catch (err) {
-                    console.error(err);
+                } catch{
                     setError("Failed to fetch weather data");
                     setWeather(null);
                 } finally {
                     setLoading(false);
                 }
             },
-            (err) => {
-                console.error(err);
+            () => {
                 setError("Location permission denied or unavailable");
                 setLoading(false);
             }
