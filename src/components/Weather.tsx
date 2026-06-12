@@ -8,27 +8,14 @@ import {
     Gauge
 } from "lucide-react";
 import { useState, useEffect } from "react";
-import { fetchWeatherData } from "../api/weather.api";
+import { fetchWeatherData, type WeatherData } from "../api/weather.api";
 import { ThemeToggle } from "./ThemeToggle";
 import WeatherCard from "./WeatherCard";
 import WeatherSkeleton from "./WeatherSkeleton";
 
-interface WeatherType {
-    city: string;
-    country: string;
-    temp: number;
-    feels_like: number;
-    description: string;
-    humidity: number;
-    windSpeed: number;
-    pressure: number;
-    visibility: number;
-    icon?: string;
-}
-
 
 function Weather() {
-    const [weather, setWeather] = useState<WeatherType | null>(null);
+    const [weather, setWeather] = useState<WeatherData | null>(null);
     const [searchCity, setSearchCity] = useState("");
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
